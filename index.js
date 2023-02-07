@@ -7,11 +7,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const conn = require('./database/conn');
-const rotaUsuarios = require('./routes/Home')
+const rotaUsuarios = require('./routes/Home');
+conn.sync()
 
 app.use('/', rotaUsuarios)
-
-console.log(process.env)
 
 try {
     conn.authenticate()

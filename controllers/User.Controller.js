@@ -27,8 +27,21 @@ module.exports = class Usuarios{
             return res.json(data)
         }).catch(err => {
             res.json({error: `Ocorreu um erro: ${err}`});
-        })
+        });
 
+    }
+
+    static async removeUsers(req,res){
+        const id = req.params.id
+
+        if(!id){
+            return res.json("Informe o ID do registro que deseja excluir...")
+        }
+
+        await Usuario.destroy({where:{
+            id: id
+        }});
+        res.redirect('/')
 
     }
 }
