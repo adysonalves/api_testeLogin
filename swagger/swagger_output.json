@@ -49,6 +49,12 @@
                 },
                 "imagem": {
                   "example": "any"
+                },
+                "uid_google": {
+                  "example": "any"
+                },
+                "uid_facebook": {
+                  "example": "any"
                 }
               }
             }
@@ -102,11 +108,7 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": {}
       }
     }
   }
