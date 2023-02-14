@@ -60,9 +60,6 @@ module.exports = class Usuarios{
     static async loginUser(req,res){
         const {email, senha, tipoCadastro} = req.body;
 
-        const buscaUser = await Usuario.findOne({where:{email: email}, raw: true})
-        
-        
-        console.log(verificaUser);
+        const buscaUser = await Usuario.findOne({where:{email: email}, raw: true});
     } 
 }
