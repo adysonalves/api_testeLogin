@@ -6,7 +6,7 @@ module.exports = class Usuarios{
         const users = await Usuario.findAll({raw: true});
 
         if(!users.length > 0){
-            return res.json("Nenhum usuário foi cadastrado...")
+            return res.json("Nenhum usuário foi cadastrado...");
         }
 
         res.json(users);
@@ -41,7 +41,35 @@ module.exports = class Usuarios{
         await Usuario.destroy({where:{
             id: id
         }});
-        res.redirect('/')
+        res.redirect('/');
 
     }
+
+    static async loginUser(req,res){
+        const user = {
+            email: req.body.email,
+            senha: req.body.senha,
+            tipoCadastro: req.body.tipoCadastro
+        }
+
+        const verificaUser = await Usuario.findOne({where:{
+            email: user.email
+        }, raw:true});
+
+        if(verificaUser != null){
+            if(verificaUser.tipoCadastro == 'App' && user.senha == senha){
+               return res.json("Você está logado com a sua conta do app.")
+            }
+
+            if((verificaUser.tipoCadastro == "Google" || verificaUser.tipoCadastro == "Facebook") && user.email == verificaUser.email){
+                return res.json("Você está logado com a sua conta social.")
+            }
+
+            res.json('Usuário não encontrado...')
+        }
+
+        
+        
+        console.log(verificaUser);
+    } 
 }
