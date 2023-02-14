@@ -1,4 +1,7 @@
 const Usuario = require("../models/Usuario");
+const jtw = require('jsonwebtoken');
+
+
 
 module.exports = class Usuarios{
 
@@ -19,8 +22,17 @@ module.exports = class Usuarios{
             email: req.body.email,
             senha: req.body.senha,
             tipoCadastro: req.body.tipoCadastro,
-            imagem: req.body.imagem
+            imagem: req.body.imagem,
+            uid_google: req.body.uid_google,
+            uid_facebook: req.body.uid_facebook
+        }
 
+        if(user.uid_google == undefined || user.uid_google == null){
+            user.uid_google = '';
+        }
+
+        if(user.uid_facebook == undefined || user.uid_facebook == null){
+            user.uid_facebook = '';
         }
 
         await Usuario.create(user).then(data => {
@@ -46,28 +58,9 @@ module.exports = class Usuarios{
     }
 
     static async loginUser(req,res){
-        const user = {
-            email: req.body.email,
-            senha: req.body.senha,
-            tipoCadastro: req.body.tipoCadastro
-        }
+        const {email, senha, tipoCadastro} = req.body;
 
-        const verificaUser = await Usuario.findOne({where:{
-            email: user.email
-        }, raw:true});
-
-        if(verificaUser != null){
-            if(verificaUser.tipoCadastro == 'App' && user.senha == senha){
-               return res.json("Você está logado com a sua conta do app.")
-            }
-
-            if((verificaUser.tipoCadastro == "Google" || verificaUser.tipoCadastro == "Facebook") && user.email == verificaUser.email){
-                return res.json("Você está logado com a sua conta social.")
-            }
-
-            res.json('Usuário não encontrado...')
-        }
-
+        const buscaUser = await Usuario.findOne({where:{email: email}, raw: true})
         
         
         console.log(verificaUser);

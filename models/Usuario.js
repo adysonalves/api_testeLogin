@@ -25,6 +25,12 @@ const Usuario = conn.define('usuario', {
     imagem:{
         type: DataTypes.STRING,
         allowNull: false
+    },
+    uid_google:{
+        type: DataTypes.STRING
+    },
+    uid_facebook:{
+        type: DataTypes.STRING
     }
 });
 
