@@ -95,6 +95,12 @@
             "schema": {
               "type": "object",
               "properties": {
+                "nome": {
+                  "example": "any"
+                },
+                "cpf": {
+                  "example": "any"
+                },
                 "email": {
                   "example": "any"
                 },
@@ -102,6 +108,15 @@
                   "example": "any"
                 },
                 "tipoCadastro": {
+                  "example": "any"
+                },
+                "imagem": {
+                  "example": "any"
+                },
+                "uid_google": {
+                  "example": "any"
+                },
+                "uid_facebook": {
                   "example": "any"
                 }
               }
