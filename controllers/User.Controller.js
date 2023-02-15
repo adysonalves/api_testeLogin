@@ -2,6 +2,8 @@ const Usuario = require("../models/Usuario");
 const jtw = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+const Autenticacao = require('./AutenticacaoController');
+
 
 
 module.exports = class Usuarios{
@@ -27,6 +29,8 @@ module.exports = class Usuarios{
             uid_google: req.body.uid_google,
             uid_facebook: req.body.uid_facebook
         }
+
+        user.senha = await bcrypt.hash(req.body.senha, 10)
 
         await Usuario.create(user).then(data => {
             return res.json(data)
@@ -70,18 +74,22 @@ module.exports = class Usuarios{
         // Caso exista um usuário cadastrado com esse e-mail:
         if(buscaUser != null){
 
-            // Verifica se o usuário está logando com uma conta criada diretamente no App, se sim, ele verifica se as informações batem e loga ele na aplicação:
-            if(buscaUser.tipoCadastro == 'APP' && user.senha == buscaUser.senha){
-                return console.log('Você está logado com e-mail e senha');
+            // Verifica se o usuário está logando com uma conta criada diretamente no App, se sim, ele verifica se as informações batem e gera o token:
+            if(buscaUser.tipoCadastro == 'APP' && await bcrypt.compare(user.senha, buscaUser.senha)){
+                const token = Autenticacao.gerarToken(buscaUser);
+                console.log('Você está logado com e-mail e senha');
+                return res.json(token);
             }
 
-            // Verifica se o usuário está tentando logar com sua conta Google, caso sim, ele compara as informações e loga ele na aplicação:
+            // Verifica se o usuário está tentando logar com sua conta Google, caso sim, ele compara as informações e gera o token:
             if(buscaUser.tipoCadastro == 'GOOGLE' && await bcrypt.compare(user.uid_google, buscaUser.uid_google)){
+                const token = Autenticacao.gerarToken(buscaUser);
                 return console.log('Você está logado com sua conta google');
             }
 
-            // Verifica se o usuário está tentando logar com sua conta Google, caso sim, ele compara as informações e loga ele na aplicação:
+            // Verifica se o usuário está tentando logar com sua conta Google, caso sim, ele compara as informações e gera o token:
             if(buscaUser.tipoCadastro == 'FACEBOOK' && await bcrypt.compare(user.uid_facebook,buscaUser.uid_facebook)){
+                const token = Autenticacao.gerarToken(buscaUser);
                 return console.log('Você está logado com sua conta do Facebook');
             }
 
